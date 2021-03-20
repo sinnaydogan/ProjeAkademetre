@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@using (Html.BeginForm("Another", "Excel"))
+{
+    <body>
+        <div style="width: 100%;">
+            <div class="panel panel-primary" style="width: 400px; margin: 0 auto;">
+
+                <div class="panel panel-heading"> Bilgi Formu </div>
+
+
+                <div class="panel panel-body">
+                    <form id="frmlogin" method="post" action="/FormExample1/Create">
+                        İSİM
+                        <input type="text" name="firstName" id="firstName" class="form-control" />
+                        SOYİSİM
+                        <input type="text" name="surName" id="surName" class="form-control" />
+                        ADRES
+                        <input type="text" name="adres" id="adres" class="form-control" />
+                        MAİL
+                        <input type="text" name="mail" id="mail" class="form-control" />
+                        <br />
+
+
+                        <input type="button" name="btntable" class="btn btn-lg btn-primary" value="DataTable Ekle" id="btntable" />
+                        <input type="submit" value="Excel İndir" class="btn btn-lg btn-primary" />
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </body>
+    <table class="table table-striped table-bordered table-hover"
+           id="TableId"
+           cellspacing="0"
+           align="center"
+           width="100%">
+        <thead>
+            <tr>
+                <th>İSİM</th>
+                <th>SOYİSİM</th>
+                <th>ADRES</th>
+                <th>MAİL</th>
+            </tr>
+        </thead>
+       
+    </table>
+   
+    <script>
+        $("#btntable").click(function () {
+            $('#TableId').DataTable(
+                {
+                    "serverSide": true,
+                    "ajax":
+                    {
+                        "contentType": "application/json",
+                        "type": "GET",
+                        "dataType": "JSON",
+                        "data": function (d) {
+                            return d;
+                        },
+                        "dataSrc": function (json) {
+                            json.draw = json.d.draw;
+                            json.recordsTotal = json.d.recordsTotal;
+                            json.recordsFiltered = json.d.recordsFiltered;
+                            json.data = json.d.data;
+                            var return_data = json;
+                            return return_data.data;
+                        }
+                    },
+                    "columns": [
+                        { "data": "İSİM" },
+                        { "data": "SOYİSİM" },
+                        { "data": "ADRES" },
+                        { "data": "MAİL" }
+                    ]
+                });
+        });
+    </script>
+
+}
